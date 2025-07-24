@@ -23,6 +23,10 @@ export default function SingleDatePicker({
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
 
   useEffect(() => {
+    setSelectedDate(value);
+  }, [value]);
+
+  useEffect(() => {
     onChange(selectedDate);
   }, [selectedDate, onChange]);
 
@@ -49,16 +53,16 @@ export default function SingleDatePicker({
           {selectedDate && (
             <button
               onClick={clearDate}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-gray-200"
+              className="absolute top-1/2 -translate-y-1/2 p-1 rounded hover:cursor-pointer bg-black"
             >
-              <X className="w-4 h-4 text-gray-500" />
+              <X className="w-5 h-5 text-white" />
             </button>
           )}
         </div>
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="p-0 bg-white shadow-md rounded-lg border border-border m-0 "
+        className="p-0 bg-white shadow-md rounded-lg border border-border m-0"
       >
         <Calendar
           mode="single"

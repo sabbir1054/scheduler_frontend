@@ -1,35 +1,50 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { getBaseUrl } from "@/config/envConfig";
 import { resourceTypes } from "@/constance/resourceTypes";
+import { DashboardHeaderProps } from "@/interfaces/DashboardHeaderProps";
 import { format } from "date-fns";
-import { X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { MultiSelect } from "../MultiSelect/MultiSelect";
 import SingleDatePicker from "../SignleDatePicker/SingleDatePicker";
 
-export default function DashboardHeader({ setData, limit, page }: any) {
+export default function DashboardHeader({
+  setData,
+  setPage,
+  setLimit,
+  limit,
+  page,
+}: DashboardHeaderProps) {
   const [currentDate] = useState(new Date());
   const [filter, setFilter] = useState("Upcoming");
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedType, setSelectedType] = useState<string>("");
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 
-  const removeType = (type: string) => {
-    setSelectedTypes((prev) => prev.filter((t) => t !== type));
+  /** Reset all filters */
+  const handleClearFilters = () => {
+    setFilter("Upcoming");
+    setSelectedType("");
+    setStartDate(undefined);
+    setPage(1);
+    setLimit(12);
   };
 
   /** Convert current filters to query params */
   const getApiParams = () => {
     const params = new URLSearchParams();
-    if (filter) params.append("status", filter?.toLocaleLowerCase());
-    if (selectedTypes.length > 0)
-      params.append("types", selectedTypes.join(","));
+    if (filter) params.append("status", filter?.toLowerCase());
+    if (selectedType) params.append("resource", selectedType);
     if (startDate) params.append("date", startDate.toISOString());
-    if (page) params.append("page", page);
-    if (limit) params.append("limit", limit);
+    if (page) params.append("page", page?.toString());
+    if (limit) params.append("limit", limit?.toString());
     return params.toString();
   };
 
@@ -42,9 +57,8 @@ export default function DashboardHeader({ setData, limit, page }: any) {
   };
 
   useEffect(() => {
-    // Uncomment when backend is ready
     fetchData();
-  }, [filter, selectedTypes, startDate]);
+  }, [filter, selectedType, startDate, page, limit]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -87,37 +101,35 @@ export default function DashboardHeader({ setData, limit, page }: any) {
 
         {/* Filters on the Right */}
         <div className="flex space-x-4">
-          {/* Resource Type Select */}
-          <div className="space-y-2">
-            <MultiSelect
-              options={resourceTypes}
-              selected={selectedTypes}
-              onChange={setSelectedTypes}
-            />
-            {/* Show Selected Types */}
-            <div className="flex flex-wrap gap-2">
-              {selectedTypes.map((type) => (
-                <span
-                  key={type}
-                  className="flex items-center bg-gray-200 rounded px-2 py-1 text-sm"
-                >
+          {/* Single Resource Type Select */}
+          <Select value={selectedType} onValueChange={setSelectedType}>
+            <SelectTrigger className="w-48">
+              <SelectValue placeholder="Select a resource type" />
+            </SelectTrigger>
+            <SelectContent>
+              {resourceTypes.map((type: string) => (
+                <SelectItem key={type} value={type}>
                   {type}
-                  <button
-                    className="ml-1 text-gray-600 hover:text-black hover:cursor-pointer"
-                    onClick={() => removeType(type)}
-                  >
-                    <X size={12} />
-                  </button>
-                </span>
+                </SelectItem>
               ))}
-            </div>
-          </div>
+            </SelectContent>
+          </Select>
 
           {/* Single Date Picker */}
           <div>
             <SingleDatePicker value={startDate} onChange={setStartDate} />
           </div>
         </div>
+      </div>
+
+      {/* Clear All Filters Button */}
+      <div className="flex justify-end">
+        <p
+          className="text-red-300 hover:text-red-500 hover:cursor-pointer"
+          onClick={handleClearFilters}
+        >
+          Clear All Filters
+        </p>
       </div>
     </div>
   );
