@@ -53,7 +53,7 @@ export default function DashboardHeader({
     const query = getApiParams();
     const response = await fetch(`${getBaseUrl()}/booking?${query}`);
     const data = await response.json();
-    setData(data);
+    setData(data?.data);
   };
 
   useEffect(() => {

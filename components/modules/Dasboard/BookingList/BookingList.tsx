@@ -15,7 +15,7 @@ export default function BookingList({
   page: number;
   setPage: (page: number) => void;
   setLimit: (limit: number) => void;
-  bookings: Booking[];
+  bookings: Booking[] | undefined;
 }) {
   const handleEdit = (id: string) => {
     console.log("Edit booking:", id);

@@ -36,7 +36,7 @@ export default function Dashboard() {
           <BookingList
             limit={limit}
             page={page}
-            bookings={data?.data?.data}
+            bookings={data?.data}
             setPage={setPage}
             setLimit={setLimit}
           />
