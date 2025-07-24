@@ -19,6 +19,7 @@ export default function Sidebar() {
 
   const menuItems = [
     { name: "Dashboard", icon: LayoutDashboard, href: "/" },
+    { name: "List Group By View", icon: LayoutDashboard, href: "/groupByList" },
     { name: "Calendar", icon: CalendarDays, href: "/calendar" },
   ];
 
