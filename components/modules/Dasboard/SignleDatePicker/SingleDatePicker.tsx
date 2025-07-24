@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { CalendarIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -10,26 +8,27 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { DateRange } from "react-day-picker";
+import { CalendarIcon, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
-interface DateRangePickerProps {
-  value: DateRange | undefined;
-  onChange: (value: DateRange | undefined) => void;
+interface SingleDatePickerProps {
+  value: Date | undefined;
+  onChange: (value: Date | undefined) => void;
 }
 
-export default function DateRangePicker({
+export default function SingleDatePicker({
   value,
   onChange,
-}: DateRangePickerProps) {
-  const [date, setDate] = useState<DateRange | undefined>(value);
+}: SingleDatePickerProps) {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
 
   useEffect(() => {
-    onChange(date);
-  }, [date, onChange]);
+    onChange(selectedDate);
+  }, [selectedDate, onChange]);
 
   const clearDate = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setDate(undefined);
+    setSelectedDate(undefined);
   };
 
   return (
@@ -41,20 +40,13 @@ export default function DateRangePicker({
             className="w-full justify-start text-left font-normal pr-8"
           >
             <CalendarIcon className="w-4 h-4 mr-2" />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, "MMM d, yyyy")} -{" "}
-                  {format(date.to, "MMM d, yyyy")}
-                </>
-              ) : (
-                format(date.from, "MMM d, yyyy")
-              )
+            {selectedDate ? (
+              format(selectedDate, "MMM d, yyyy")
             ) : (
-              <span>Select Date Range</span>
+              <span>Select Date</span>
             )}
           </Button>
-          {date?.from && (
+          {selectedDate && (
             <button
               onClick={clearDate}
               className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-gray-200"
@@ -66,13 +58,12 @@ export default function DateRangePicker({
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="p-0 bg-white shadow-md rounded-lg border border-border w-[600px]"
+        className="p-0 bg-white shadow-md rounded-lg border border-border m-0 "
       >
         <Calendar
-          mode="range"
-          selected={date}
-          onSelect={setDate}
-          numberOfMonths={2}
+          mode="single"
+          selected={selectedDate}
+          onSelect={setSelectedDate}
           className="p-4"
         />
       </PopoverContent>
