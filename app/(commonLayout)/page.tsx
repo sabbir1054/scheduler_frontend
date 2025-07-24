@@ -1,9 +1,8 @@
 "use client";
 import BookingList from "@/components/modules/Dasboard/BookingList/BookingList";
 import DashboardHeader from "@/components/modules/Dasboard/DashboardHeader/DashboardHeader";
-import { Button } from "@/components/ui/button";
+import MakeBookingRequest from "@/components/modules/MakeBookingRequest/MakeBookingRequest";
 import { BookingResponse } from "@/interfaces/BookingProps";
-import { Plus } from "lucide-react";
 import { useState } from "react";
 
 export default function Dashboard() {
@@ -25,9 +24,7 @@ export default function Dashboard() {
 
         <hr className="mt-2"></hr>
         <div className="mt-6">
-          <Button className="bg-black text-white">
-            <Plus className="w-4 h-4 mr-2" /> Make Booking Request
-          </Button>
+          <MakeBookingRequest />
         </div>
         <div className="mt-2">
           {/* <p className="text-muted-foreground">

@@ -16,7 +16,7 @@ export default function BookingCard({
 }: BookingCardProps) {
   const startDate = new Date(start);
   const endDate = new Date(end);
-
+    
   return (
     <div className="p-4 border rounded-lg shadow-sm bg-white flex flex-col space-y-3">
       {/* Header */}
